@@ -16,6 +16,7 @@ export const Catogires = styled.View`
 export const ViewCategory = styled.TouchableOpacity`
     align-items: center; 
     opacity: 1;
+    margin-right: 8px;
 `
 
 export const ViewCategoryIcon = styled.View`

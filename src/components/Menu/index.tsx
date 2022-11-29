@@ -15,22 +15,20 @@ import {
     AddToCartButton
 } from './styles'
 
-import { categories } from '../../mocks/categories'
 import { products } from '../../mocks/products'
-import { Circle } from 'react-native-svg'
 import { PlusCircle } from '../Icons/PlusCircle'
-
-const test = 'https://m.media-amazon.com/images/I/51lsaWT3Z5L._AC_UL320_.jpg'
+import { api } from '../../services/api'
+import { Category } from '../../types/Category'
 
 
 export default function Menu() {
 
     const [selectedCategory, setSelectedCategory] = useState('')
+    const [categories, setCategories] = useState<Category[]>([])
 
     useEffect(() => {
-        fetch('http://172.26.123.234:3333/categories')
-            .then(response => response.json())
-            .then(response => console.log(response.data))
+        api.get('/categories')
+           .then(response => setCategories(response.data))
     }, [selectedCategory])
 
     function handleSelectedCategory(id: string) {
@@ -47,14 +45,14 @@ export default function Menu() {
                 <FlatList
                     showsHorizontalScrollIndicator={false}
                     data={categories}
-                    keyExtractor={categories => categories._id}
+                    keyExtractor={categories => categories.id}
                     horizontal
                     renderItem={({ item }) => {
-                        const isSelected = selectedCategory === item._id
+                        const isSelected = selectedCategory === item.id
                         return (
-                            <ViewCategory onPress={() => handleSelectedCategory(item._id)}>
-                                <ViewCategoryIcon><Text size={16} opacity={isSelected ? 1 : 0.5} >{item.icon}</Text></ViewCategoryIcon>
-                                <Text size={18} weight='700' opacity={isSelected ? 1 : 0.5} >{item.name}</Text>
+                            <ViewCategory onPress={() => handleSelectedCategory(item.id)}>
+                                <ViewCategoryIcon><Text size={17} opacity={isSelected ? 1 : 0.5}>{item.icon}</Text></ViewCategoryIcon>
+                                <Text size={16} weight='700' opacity={isSelected ? 1 : 0.5} >{item.name}</Text>
                             </ViewCategory>
                         )
                     }}
