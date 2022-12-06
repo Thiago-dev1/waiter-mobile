@@ -1,5 +1,5 @@
 import { Text } from '../Text'
-import OrderHeader from './OrderHeader';
+import OrderHeader from './OrderHeader'
 import { Container } from './styles'
 
 interface Props {

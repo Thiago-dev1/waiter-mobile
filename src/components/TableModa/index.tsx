@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal, Platform, TouchableOpacity } from 'react-native'
+import { Modal, TouchableOpacity } from 'react-native'
 
 import Button from '../Button'
 import { Close } from '../Icons/Close'
