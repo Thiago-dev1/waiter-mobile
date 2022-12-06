@@ -61,3 +61,9 @@ export const AddToCartButton = styled.TouchableOpacity`
     bottom: 0;
     right: 0;
 `
+
+export const CenterContainer = styled.View`
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+`

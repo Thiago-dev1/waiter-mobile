@@ -1,11 +1,23 @@
 import { Text } from '../Text'
+import OrderHeader from './OrderHeader';
 import { Container } from './styles'
 
-export default function Header() {
+interface Props {
+    table?: string;
+    setTableSelected: React.Dispatch<React.SetStateAction<string>>
+}
+
+export default function Header({ table, setTableSelected }: Props) {
     return (
         <Container>
-            <Text>Bem-vindo(a) ao</Text>
-            <Text weight='700' size={20} >WAITER<Text size={20}>APP</Text> </Text>
+            {table ?
+                <OrderHeader setTableSelected={setTableSelected} table={table} />
+                :
+                <>
+                    <Text>Bem-vindo(a) ao</Text>
+                    <Text weight='700' size={20} >WAITER<Text size={20}>APP</Text> </Text>
+                </>
+            }
         </Container>
     )
 }

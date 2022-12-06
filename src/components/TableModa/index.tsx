@@ -17,8 +17,19 @@ export default function TableModal({openModal, setOpenModal, onSave}: Props) {
 
     const [table, setTable] = useState('')
 
+    function handleSave() {
+        onSave(table)
+        setOpenModal(false)
+        setTable('')
+    }
+
     return (
-        <Modal transparent visible={openModal} animationType='fade'>
+        <Modal 
+            transparent 
+            visible={openModal} 
+            animationType='fade'
+            onRequestClose={() => setOpenModal(false)}
+        >
             <Overlay>
                 <ModalBody>
                     <HeaderModal>
@@ -34,7 +45,7 @@ export default function TableModal({openModal, setOpenModal, onSave}: Props) {
                             keyboardType='number-pad'
                             onChangeText={(value) => setTable(value)}
                         />
-                        <Button disabled={table.length > 0 ? false : true} onPress={() => [onSave(table), setOpenModal(false)]}>
+                        <Button disabled={table.length > 0 ? false : true} onPress={handleSave}>
                             Salvar
                         </Button>
                     </Form>
