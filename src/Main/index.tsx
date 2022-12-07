@@ -19,34 +19,10 @@ export default function Main() {
     const [tableSelected, setTableSelected] = useState('')
     const [cartItems, setCartItems] = useState<CartItem[]>([])
     const [isLoading, setIsLoading] = useState(false)
+    const [isLoadingProducts, setIsLoadingProducts] = useState(false)
     const [categories, setCategories] = useState<Category[]>([])
     const [products, setProducts] = useState<Product[]>([])
 
-    async function getCategories() {
-        setIsLoading(true)
-
-        const response = await api.get('/categories')
-        setCategories(response.data)
-
-        setIsLoading(false)
-    }
-
-    async function getProducts() {
-        setIsLoading(true)
-
-        const response = await api.get('/products')
-        setProducts(response.data)
-
-        setIsLoading(false)
-    }
-
-    useEffect(() => {
-        getProducts()
-    }, [])
-
-    useEffect(() => {
-        getCategories()
-    }, [])
 
     function handleSaveTable(table: string) {
         setTableSelected(table)
@@ -98,6 +74,42 @@ export default function Main() {
         setTableSelected('')
     }
 
+    async function getCategories() {
+        setIsLoading(true)
+
+        const response = await api.get('/categories')
+        setCategories(response.data)
+
+        setIsLoading(false)
+    }
+
+    async function getProducts() {
+        setIsLoading(true)
+
+        const response = await api.get(`/products`)
+        setProducts(response.data)
+
+        setIsLoading(false)
+    }
+
+    async function handleSelectCategory(categoryId: String) {
+        setIsLoadingProducts(true)
+        await new Promise(resolve => setTimeout(resolve, 500))
+        const response = await api.get(`/products/${categoryId}`)
+
+        setProducts(response.data)
+
+        setIsLoadingProducts(false)
+    }
+
+    useEffect(() => {
+        getCategories()
+    }, [])
+
+    useEffect(() => {
+        getProducts()
+    }, [])
+
     return (
         <>
             <Container>
@@ -109,15 +121,21 @@ export default function Main() {
                     </CenterContainer>
                 ) : (
                     <>
-                        <Categories categories={categories} />
-                        <Menu products={products} table={tableSelected} onAddToCart={handleAddCart} />
+                        <Categories categories={categories} onSelectCategory={handleSelectCategory} />
+                        {isLoadingProducts ?
+                            <CenterContainer>
+                                <ActivityIndicator color='red' size='large' />
+                            </CenterContainer>
+                            :
+                            <Menu products={products} table={tableSelected} onAddToCart={handleAddCart} />
+                        }
                     </>
                 )
                 }
 
             </Container>
 
-            {!tableSelected && (
+            {!tableSelected && !isLoading && (
                 <Footer setOpenModal={setOpenModal} />
             )}
 
@@ -127,6 +145,7 @@ export default function Main() {
                     onAddToCart={handleAddCart}
                     onRemoveToCart={handleRemoveCart}
                     OnConfirmOrder={handleConfirmOrder}
+                    tableSelected={tableSelected}
                 />
             )}
 

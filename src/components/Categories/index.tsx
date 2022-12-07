@@ -8,21 +8,24 @@ import { Catogires, ViewCategory, ViewCategoryIcon } from './styles'
 
 
 interface Props {
-    categories: Category[]
+    categories: Category[];
+    onSelectCategory: (categoryId: string) => Promise<void>;
 }
 
-export default function Categories({categories}: Props) {
+export default function Categories({categories, onSelectCategory}: Props) {
 
-    const [selectedCategory, setSelectedCategory] = useState('')
     // const [categories, setCategories] = useState<Category[]>([])
+    const [selectedCategory, setSelectedCategory] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
 
-    function handleSelectedCategory(id: string) {
-        if (id == selectedCategory) {
+    function handleSelectedCategory(categoryId: string) {
+        if (categoryId == selectedCategory) {
             setSelectedCategory('')
+            onSelectCategory('')
         } else {
-            setSelectedCategory(id)
+            setSelectedCategory(categoryId)
+            onSelectCategory(categoryId)
         }
     }
 

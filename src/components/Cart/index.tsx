@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { FlatList, TouchableOpacity, View } from 'react-native'
+import { api } from '../../services/api'
 import { CartItem } from '../../types/CartItem'
 import { Product } from '../../types/Product'
 import Button from '../Button'
@@ -14,10 +15,11 @@ interface Props {
     onAddToCart: (prodcut: Product) => void;
     onRemoveToCart: (prodcut: Product) => void;
     OnConfirmOrder: () => void;
+    tableSelected: string;
 }
 
 
-export default function Cart({cartItems, onAddToCart, onRemoveToCart, OnConfirmOrder}: Props) {
+export default function Cart({cartItems, onAddToCart, onRemoveToCart, OnConfirmOrder, tableSelected}: Props) {
 
     const [openModal, setOpenModal] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -27,7 +29,20 @@ export default function Cart({cartItems, onAddToCart, onRemoveToCart, OnConfirmO
     }, 0)
 
 
-    function handleConfirmOrder() {
+    async function handleConfirmOrder() {
+        setIsLoading(true)
+        const  payload = {
+            table: tableSelected,
+            products: cartItems.map((item) => ({
+                product: item.product,
+                quantity: item.quantity
+            }))
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 500))
+        await api.post('/orders', payload)
+
+        setIsLoading(false)
         setOpenModal(true)
     }
 
